@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { Copy, ExternalLink, Loader2, Shuffle, Trophy, Users } from '@lucide/vue'
+import { Copy, Download, ExternalLink, Loader2, Shuffle, Trophy, Users } from '@lucide/vue'
 import { Badge as UiBadge } from '~/components/ui/badge'
 import { Button as UiButton } from '~/components/ui/button'
 import { Card as UiCard } from '~/components/ui/card'
 import { Input as UiInput } from '~/components/ui/input'
+import { buildEntriesCsv, createEntriesCsvFilename } from '~~/shared/utils/giveaway-csv'
 
 const route = useRoute()
 const id = computed(() => String(route.params.id))
@@ -87,6 +88,24 @@ async function pickWinners() {
 
 async function copy(value: string) {
   await navigator.clipboard.writeText(value)
+}
+
+function exportEntriesCsv() {
+  if (!giveaway.value || entries.value.length === 0) {
+    return
+  }
+
+  const csv = buildEntriesCsv(entries.value)
+  const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+
+  link.href = url
+  link.download = createEntriesCsvFilename(giveaway.value.slug)
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
 }
 </script>
 
@@ -217,13 +236,19 @@ async function copy(value: string) {
         </Card>
 
         <Card class="overflow-hidden">
-          <div class="border-b p-5">
-            <h2 class="text-xl font-semibold">
-              Учасники
-            </h2>
-            <p class="text-sm text-muted-foreground">
-              Нові заявки показані першими.
-            </p>
+          <div class="flex flex-col justify-between gap-4 border-b p-5 sm:flex-row sm:items-center">
+            <div>
+              <h2 class="text-xl font-semibold">
+                Учасники
+              </h2>
+              <p class="text-sm text-muted-foreground">
+                Нові заявки показані першими.
+              </p>
+            </div>
+            <UiButton variant="outline" :disabled="entries.length === 0" @click="exportEntriesCsv">
+              <Download class="h-4 w-4" />
+              Експорт CSV
+            </UiButton>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full min-w-[680px] text-sm">
