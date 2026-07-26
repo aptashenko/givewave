@@ -138,7 +138,7 @@ async function createGiveaway() {
     isCreateModalOpen.value = false
     isResultModalOpen.value = true
   } catch (error: any) {
-    errorMessage.value = error?.statusMessage || error?.message || 'Не вдалося створити розіграш'
+    errorMessage.value = getRequestErrorMessage(error, 'Не вдалося створити розіграш')
   } finally {
     pending.value = false
   }
@@ -174,6 +174,13 @@ function openEndsAtPicker() {
   } catch {
     input.focus()
   }
+}
+
+function getRequestErrorMessage(error: any, fallback: string) {
+  return error?.data?.statusMessage
+    || error?.data?.message
+    || error?.statusMessage
+    || fallback
 }
 </script>
 

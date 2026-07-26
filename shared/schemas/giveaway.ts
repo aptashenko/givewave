@@ -25,7 +25,7 @@ const optionalUrl = z.preprocess((value) => {
 
 export const createGiveawaySchema = z.object({
   title: z.string().trim().min(3, 'Вкажіть назву розіграшу').max(120),
-  description: z.string().trim().min(10, 'Додайте короткий опис розіграшу').max(500),
+  description: z.string().trim().min(10, 'Опис має містити щонайменше 10 символів').max(500),
   prizeDescription: z.string().trim().min(3, 'Опишіть приз').max(1000),
   prizeEyebrow: optionalText,
   organizerName: z.string().trim().min(2, 'Вкажіть організатора').max(120),

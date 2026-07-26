@@ -3,6 +3,7 @@ import { createGiveawaySchema, type CreateGiveawayInput } from '~~/shared/schema
 import { GiveawayEntity } from '~~/server/db/entities'
 import { useDataSource } from '~~/server/db/data-source'
 import { adminGiveawayUrl, createAdminToken, createSlug, parseZodError, publicGiveawayUrl } from '~~/server/utils/giveaway'
+import { sendGiveawayCreatedNotification } from '~~/server/utils/telegram'
 
 export default defineEventHandler(async (event) => {
   let input: CreateGiveawayInput
@@ -33,6 +34,13 @@ export default defineEventHandler(async (event) => {
   })
 
   const saved = await giveawayRepository.save(giveaway)
+  const publicUrl = publicGiveawayUrl(saved.slug)
+  const adminUrl = adminGiveawayUrl(saved.id, saved.adminToken)
+
+  await sendGiveawayCreatedNotification({
+    title: saved.title,
+    publicUrl
+  })
 
   return {
     giveaway: {
@@ -52,7 +60,7 @@ export default defineEventHandler(async (event) => {
       status: saved.status,
       createdAt: saved.createdAt
     },
-    publicUrl: publicGiveawayUrl(saved.slug),
-    adminUrl: adminGiveawayUrl(saved.id, saved.adminToken)
+    publicUrl,
+    adminUrl
   }
 })

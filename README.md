@@ -88,3 +88,14 @@ API integration tests require a running app and the same test Postgres database 
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/giveaways npm run dev
 GIVEAWAY_TEST_BASE_URL=http://localhost:3000 TEST_DATABASE_URL=postgres://postgres:postgres@localhost:5432/giveaways npm run test:api
 ```
+
+## Telegram notifications
+
+Set these server-only env variables to send critical error alerts and new giveaway public links to Telegram:
+
+```bash
+TELEGRAM_BOT_TOKEN=123456:bot-token
+TELEGRAM_CHAT_ID=123456789
+```
+
+Critical alerts are sent only for server errors with status `500+`. Validation errors like `400`, `404`, and `409` are not sent.

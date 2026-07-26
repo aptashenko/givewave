@@ -92,10 +92,17 @@ async function submitForm() {
 
     isSubmitted.value = true
   } catch (error: any) {
-    submitError.value = error?.statusMessage || 'Не вдалося зареєструвати заявку. Спробуйте ще раз.'
+    submitError.value = getRequestErrorMessage(error, 'Не вдалося зареєструвати заявку. Спробуйте ще раз.')
   } finally {
     isSubmitting.value = false
   }
+}
+
+function getRequestErrorMessage(error: any, fallback: string) {
+  return error?.data?.statusMessage
+    || error?.data?.message
+    || error?.statusMessage
+    || fallback
 }
 </script>
 
