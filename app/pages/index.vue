@@ -192,7 +192,7 @@ function getRequestErrorMessage(error: any, fallback: string) {
           <span class="grid h-10 w-10 place-items-center rounded-xl border border-violet-300/20 bg-violet-300/10 text-sm font-semibold text-violet-100 shadow-lg shadow-violet-950/30">
             G
           </span>
-          <span class="text-sm font-semibold text-white">Giveaway Studio</span>
+          <span class="text-sm font-semibold text-white">Giveaway Studio <span class="text-xs">[beta]</span></span>
         </NuxtLink>
         <UiButton
           class="hidden rounded-xl bg-violet-200 text-zinc-950 hover:bg-white focus-visible:ring-violet-200 sm:inline-flex"
