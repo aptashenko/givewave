@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "rootDir": "..",
+    "outDir": "../.test-output",
+    "skipLibCheck": true
+  },
+  "include": [
+    "./**/*.ts",
+    "../server/db/entities.ts",
+    "../shared/schemas/**/*.ts",
+    "../shared/utils/**/*.ts"
+  ]
+}
